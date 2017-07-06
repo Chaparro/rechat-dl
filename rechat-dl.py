@@ -6,6 +6,7 @@ import calendar
 import time
 import math
 import json
+import datetime
 
 CHUNK_ATTEMPTS = 6
 CHUNK_ATTEMPT_SLEEP = 10
@@ -37,7 +38,7 @@ video_len = int(vod_info["length"])
 last_timestamp = start_timestamp + int(math.ceil(video_len / 30.0) * 30)
 
 vod_info['start_timestamp'] = start_timestamp
-messages.append(vod_info)   # we store the vod metadata in the first element of the message array
+#messages.append(vod_info)   # we store the vod metadata in the first element of the message array
 
 for chat_timestamp in range(start_timestamp, last_timestamp + 1, 30):
     chunk_number = int((chat_timestamp - start_timestamp) / 30) + 1
@@ -58,7 +59,17 @@ for chat_timestamp in range(start_timestamp, last_timestamp + 1, 30):
                 error = "error received in chat message response: " + str(chat_json)
         
         if error == None:
-            messages += chat_json["data"]
+            for message in chat_json["data"]:
+                sender  = message['attributes']['from']
+                text    = message['attributes']['message']
+                timestamp = message['attributes']['timestamp']/1000.
+                temp = str(datetime.timedelta(seconds=timestamp - int(vod_info['start_timestamp'])))
+                if len(temp) == 7:
+                    temp += '.000000'
+                #stripped down json
+                json_msg = {'from': sender, 'msg': text, 'time': temp};
+                #print(json_msg);
+                messages.append(json_msg)
             break
         else:
             print("\nerror while downloading chunk #" + str(chunk_number) + ": " + error)
@@ -73,7 +84,6 @@ for chat_timestamp in range(start_timestamp, last_timestamp + 1, 30):
     if error != None:
         sys.exit("max retries exceeded.")
 
-print()
 print("saving to " + file_name)
 
 f = open(file_name, "w")

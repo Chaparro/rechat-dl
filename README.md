@@ -16,9 +16,15 @@ rechat-dl requires version 2.7+ of the Python interpreter. Its only dependency i
     	if not set, it's rechat-{VOD-ID}.json
 
 ## Output
-The outputted .json file contains a json array, the first element of which is the [VOD metadata](https://github.com/justintv/Twitch-API/blob/master/v3_resources/videos.md#get-videosid) (creation time, title, description, ...), followed by the Chat Replay messages. There's no documentation for the Chat Replay API yet, but its output is very similiar to the [IRC interface](https://github.com/justintv/Twitch-API/blob/master/IRC.md#privmsg).
+The outputted .json file contains a simplified json array, containing the following from the chat replay messages: 
+
+	-Sender
+	-Message
+	-Timestamp
+
+ There's no documentation for the Chat Replay API yet, but its output is very similiar to the [IRC interface](https://github.com/justintv/Twitch-API/blob/master/IRC.md#privmsg).
 
 This tool only downloads the chat messages, but doesn't offer a way to view them in real-time alongside a VOD.
 
 ---
-This README file was loosely inspired by the [bandcamp-dl](https://github.com/iheanyi/bandcamp-dl/blob/master/README.md) readme, which was inspired by the [youtube-dl](https://github.com/rg3/youtube-dl/blob/master/README.md) readme. So likewise, I release this readme into the public domain. I mean, I guess??
+This fork is meant to provide a simplified output for something i have in mind.
